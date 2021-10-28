@@ -19,6 +19,10 @@ const options = {
   useNewUrlParser: true,
 };
 
+mongoose.connect(dbURI, options).then(() => {
+  console.log("Database connection established");
+});
+
 var DataStorageSchema = mongoose.Schema({}, { strict: false });
 
 var DataStorage = mongoose.model("datastorage", DataStorageSchema);
@@ -57,15 +61,12 @@ SocketIO.on("connection", (Client) => {
     };
     await DataStorage.insertMany(Dataaa);
     Client.emit("Dataa", Dataaa);
-  }, 10000);
+  }, 30000);
 
   Client.on("disconnect", async (data) => {});
 });
 
+// Starting the Server
 server.listen(process.env.PORT || "8000", () => {
   console.log("Server Started");
-});
-
-mongoose.connect(dbURI, options).then(() => {
-  console.log("Database connection established");
 });
